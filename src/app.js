@@ -3,7 +3,11 @@ const app = express();
 const port = 3000;
 const model = require('./models');
 
-app.use(express.static('views'));
+// Setze die View Engine auf "ejs"
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+
+app.use(express.static('public'));
 
 app.get('/speiseplaene', async (req, res) => {
   const speiseplaene = await model.getAllSpeiseplaene();
@@ -16,8 +20,13 @@ app.get('/editSpeiseplan/:speiseplanId', async (req, res) => {
 });
 
 app.get('/menus', async (req, res) => {
-  const menus = await model.getAllMenus();
-  res.send(menus);
+  try {
+    const menus = await model.getAllMenus();
+    res.render('menus', { menus });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 app.get('/editMenu/:menuId', async (req, res) => {

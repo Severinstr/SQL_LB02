@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Menus</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+<h1>Alle Menus</h1>
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Gericht</th>
+    <th>Beilage</th>
+    <th>Preis</th>
+    <th>Zutaten</th>
+    <th>Kosten</th>
+    <th>Vegetarisch</th>
+    <th>Vegan</th>
+    <th>Halal</th>
+  </tr>
+  <% for(let i=0; i < menus.length; i++) { %>
+  <tr>
+    <td><%= menus[i].menu_id %></td>
+    <td><%= menus[i].gericht %></td>
+    <td><%= menus[i].beilage %></td>
+    <td><%= menus[i].preis %></td>
+    <td><%= menus[i].zutaten %></td>
+    <td><%= menus[i].kosten %></td>
+    <td><%= menus[i].vegetarisch %></td>
+    <td><%= menus[i].vegan %></td>
+    <td><%= menus[i].halal %></td>
+  </tr>
+  <% } %>
+</table>
+</body>
+</html>
