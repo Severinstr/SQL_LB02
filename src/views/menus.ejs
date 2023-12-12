@@ -43,6 +43,12 @@
     <td><%= menus[i].vegetarisch %></td>
     <td><%= menus[i].vegan %></td>
     <td><%= menus[i].halal %></td>
+    <td>
+      <form action="/delete-menu" method="post">
+        <input type="hidden" id="menuId" name="menuId" value="<%= menus[i].menu_id %>">
+        <button type="submit">Löschen</button>
+      </form>
+    </td>
   </tr>
   <% } %>
 </table>
