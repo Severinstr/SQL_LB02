@@ -53,10 +53,46 @@ app.get('/menus', async (req, res) => {
   }
 });
 
-app.get('/editMenu/:menuId', async (req, res) => {
-  const menu = await model.getMenuById(req.params.menuId);
-  res.send(menu);
+// Route zum Anzeigen des Menübearbeitungsformulars
+app.get('/edit-menu', async (req, res) => {
+  try {
+    const menuIdToEdit = req.query.menuId;
+    const menu = await model.getMenuById(menuIdToEdit);
+
+    if (!menu) {
+      return res.status(404).send('Menü nicht gefunden.');
+    }
+
+    res.render('editMenu', { menu });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
 });
+
+// Route zum Verarbeiten des bearbeiteten Menüs
+app.post('/edit-menu', async (req, res) => {
+  try {
+    const menuIdToEdit = req.body.menuId;
+    const updatedData = {
+      gericht: req.body.gericht,
+      beilage: req.body.beilage,
+      preis: req.body.preis,
+      zutaten: req.body.zutaten,
+      kosten: req.body.kosten,
+      vegetarisch: req.body.vegetarisch === 'on',
+      vegan: req.body.vegan === 'on',
+      halal: req.body.halal === 'on',
+    };
+
+    await model.updateMenu(menuIdToEdit, updatedData);
+    res.redirect('/menus');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

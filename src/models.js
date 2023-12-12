@@ -56,6 +56,19 @@ class CantinaModel {
         if (error) {
           reject(error);
         } else {
+          resolve(results[0]);
+        }
+      });
+    });
+  }
+
+  static updateMenu(menuId, updatedData) {
+    return new Promise((resolve, reject) => {
+      const query = `UPDATE menus SET gericht = "${updatedData.gericht}", beilage = "${updatedData.beilage}", preis = ${updatedData.preis}, zutaten = "${updatedData.zutaten}", kosten = ${updatedData.kosten}, vegetarisch = ${updatedData.vegetarisch}, vegan = ${updatedData.vegan}, halal = ${updatedData.halal} WHERE menu_id = ${menuId}`;
+      connection.query(query, (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
           resolve(results);
         }
       });
@@ -63,7 +76,8 @@ class CantinaModel {
   }
 
 
-static deleteMenu(menuId) {
+
+  static deleteMenu(menuId) {
   return new Promise((resolve, reject) => {
     const query = `DELETE FROM menus WHERE menu_id = ${menuId}`;
     connection.query(query, (error, results) => {

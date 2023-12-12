@@ -5,7 +5,35 @@
   <title>Edit Menu</title>
 </head>
 <body>
-  <h1>Edit Menu</h1>
-  <!-- Hier das Formular zum Bearbeiten des Menus einfügen -->
+<h1>Menü bearbeiten: <%= menu.gericht %></h1>
+<form action="/edit-menu" method="post">
+  <input type="hidden" name="menuId" value="<%= menu.menu_id %>"><br>
+
+  <label for="gericht">Gericht:</label>
+  <input type="text" id="gericht" name="gericht" value="<%= menu.gericht %>" required><br>
+
+  <label for="beilage">Beilage:</label>
+  <input type="text" id="beilage" name="beilage" value="<%= menu.beilage %>" required><br>
+
+  <label for="preis">Preis:</label>
+  <input type="number" step="0.01" id="preis" name="preis" value="<%= menu.preis %>" required><br>
+
+  <label for="zutaten">Zutaten:</label>
+  <input type="text" id="zutaten" name="zutaten" value="<%= menu.zutaten %>" required><br>
+
+  <label for="kosten">Kosten:</label>
+  <input type="number" step="0.01" id="kosten" name="kosten" value="<%= menu.kosten %>" required><br>
+
+  <label for="vegetarisch">Vegetarisch:</label>
+  <input type="checkbox" id="vegetarisch" name="vegetarisch" <%= menu.vegetarisch ? 'checked' : '' %> ><br>
+
+  <label for="vegan">Vegan:</label>
+  <input type="checkbox" id="vegan" name="vegan" <%= menu.vegan ? 'checked' : '' %> ><br>
+
+  <label for="halal">Halal:</label>
+  <input type="checkbox" id="halal" name="halal" <%= menu.halal ? 'checked' : '' %> ><br>
+
+  <button type="submit">Speichern</button>
+</form>
 </body>
 </html>
