@@ -75,6 +75,29 @@ class CantinaModel {
     });
   }
 
+  static insertMenu(neueMenuDaten) {
+    return new Promise((resolve, reject) => {
+      const query = 'INSERT INTO menus (gericht, beilage, preis, zutaten, kosten, vegetarisch, vegan, halal) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+      const values = [
+        neueMenuDaten.gericht,
+        neueMenuDaten.beilage,
+        neueMenuDaten.preis,
+        neueMenuDaten.zutaten,
+        neueMenuDaten.kosten,
+        neueMenuDaten.vegetarisch,
+        neueMenuDaten.vegan,
+        neueMenuDaten.halal,
+      ];
+
+      connection.query(query, values, (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results.insertId);
+        }
+      });
+    });
+  }
 
 
   static deleteMenu(menuId) {

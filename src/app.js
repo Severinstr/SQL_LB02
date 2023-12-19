@@ -94,6 +94,36 @@ app.post('/edit-menu', async (req, res) => {
 });
 
 
+// Neue Route zum Anzeigen des Formulars zum Erstellen eines neuen Menüs
+app.get('/create-menu', (req, res) => {
+  res.render('createMenu');
+});
+
+// Neue Route zum Verarbeiten des erstellten Menüs
+app.post('/create-menu', async (req, res) => {
+  try {
+    const newMenuData = {
+      gericht: req.body.gericht,
+      beilage: req.body.beilage,
+      preis: req.body.preis,
+      zutaten: req.body.zutaten,
+      kosten: req.body.kosten,
+      vegetarisch: req.body.vegetarisch === 'on',
+      vegan: req.body.vegan === 'on',
+      halal: req.body.halal === 'on',
+    };
+
+    // Fügen Sie das neue Menü zur Datenbank hinzu
+    const newMenuId = await model.insertMenu(newMenuData);
+
+    res.redirect(`/menus`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
