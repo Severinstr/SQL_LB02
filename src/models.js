@@ -36,14 +36,28 @@ class CantinaModel {
     });
   }
 
-  static getAllMenus() {
+  static getAllMenus(sortBy, sortOrder) {
     return new Promise((resolve, reject) => {
-      const query = 'SELECT * FROM menus ORDER BY gericht';
+      const query = `SELECT * FROM menus ORDER BY ${sortBy} ${sortOrder}`;
       connection.query(query, (error, results) => {
         if (error) {
           reject(error);
         } else {
           resolve(results);
+        }
+      });
+    });
+  }
+
+  static getTableColumns(tableName) {
+    return new Promise((resolve, reject) => {
+      const query = `SHOW COLUMNS FROM ${tableName}`;
+      connection.query(query, (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          const columns = results.map((result) => result.Field);
+          resolve(columns);
         }
       });
     });
@@ -98,6 +112,65 @@ class CantinaModel {
       });
     });
   }
+
+
+  static getMenusForWeek(weekStart) {
+    return new Promise((resolve, reject) => {
+      const query = 'SELECT mo1, mo2, mo3, mo4, di1, di2, di3, di4, mi1, mi2, mi3, mi4, do1, do2, do3, do4, fr1, fr2, fr3, fr4 FROM speiseplan WHERE DATE_FORMAT(datum, "%Y-%m-%d") = ?';
+      connection.query(query, [weekStart], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results[0]);
+        }
+      });
+    });
+  }
+
+
+
+  static getWeeklyMenus() {
+    return new Promise((resolve, reject) => {
+      const query = 'SELECT DISTINCT DATE_FORMAT(datum, "%Y-%m-%d") as week_start, archiviert FROM speiseplan';
+      connection.query(query, (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  }
+
+
+  static deleteWeek(weekStart) {
+    return new Promise((resolve, reject) => {
+      const query = 'DELETE FROM speiseplan WHERE DATE_FORMAT(datum, "%Y-%m-%d") = ?';
+      connection.query(query, [weekStart], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  }
+
+
+  static archiveWeek(weekStart) {
+    return new Promise((resolve, reject) => {
+      const query = 'UPDATE speiseplan SET archiviert = NOT archiviert WHERE DATE_FORMAT(datum, "%Y-%m-%d") = ?';
+      connection.query(query, [weekStart], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  }
+
+
 
 
   static deleteMenu(menuId) {

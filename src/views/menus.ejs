@@ -21,6 +21,32 @@
 <body>
 <h1>Alle Menus</h1>
 <a href="/create-menu">Neu+</a>
+
+<!-- Dropdown-Menü für Sortierung -->
+<form id="sortForm" action="/menus" method="get">
+  <label for="sortBy">Sortieren nach:</label>
+  <select id="sortBy" name="sortBy" onchange="submitForm()">
+    <% columns.forEach(function(column) { %>
+      <option value="<%= column %>" <%= column === sortBy ? 'selected' : '' %>><%= column %></option>
+    <% }); %>
+  </select>
+
+  <label for="sortOrder">Sortierreihenfolge:</label>
+  <select id="sortOrder" name="sortOrder" onchange="submitForm()">
+    <option value="asc" <%= sortOrder === 'asc' ? 'selected' : '' %>>Aufsteigend</option>
+    <option value="desc" <%= sortOrder === 'desc' ? 'selected' : '' %>>Absteigend</option>
+  </select>
+
+  <input type="submit" value="Sortieren">
+</form>
+
+<!-- JavaScript zum automatischen Absenden des Formulars bei Änderungen -->
+<script>
+  function submitForm() {
+    document.getElementById('sortForm').submit();
+  }
+</script>
+
 <table>
   <tr>
     <th>ID</th>
@@ -54,5 +80,6 @@
   </tr>
   <% } %>
 </table>
+
 </body>
 </html>
