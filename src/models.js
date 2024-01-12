@@ -127,6 +127,34 @@ class CantinaModel {
     });
   }
 
+  static updateWeek(weekStart, menus) {
+    return new Promise((resolve, reject) => {
+      const query = `UPDATE speiseplan 
+                   SET mo1 = ?, mo2 = ?, mo3 = ?, mo4 = ?, 
+                       di1 = ?, di2 = ?, di3 = ?, di4 = ?, 
+                       mi1 = ?, mi2 = ?, mi3 = ?, mi4 = ?, 
+                       do1 = ?, do2 = ?, do3 = ?, do4 = ?, 
+                       fr1 = ?, fr2 = ?, fr3 = ?, fr4 = ?
+                   WHERE DATE_FORMAT(datum, "%Y-%m-%d") = ?`;
+
+      const values = [
+        menus.mo1, menus.mo2, menus.mo3, menus.mo4,
+        menus.di1, menus.di2, menus.di3, menus.di4,
+        menus.mi1, menus.mi2, menus.mi3, menus.mi4,
+        menus.do1, menus.do2, menus.do3, menus.do4,
+        menus.fr1, menus.fr2, menus.fr3, menus.fr4,
+        weekStart
+      ];
+
+      connection.query(query, values, (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  }
 
 
   static getWeeklyMenus() {
@@ -169,7 +197,6 @@ class CantinaModel {
       });
     });
   }
-
 
 
 

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Speiseplan</title>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
 <h1>Speisepläne</h1>
@@ -11,7 +12,7 @@
   <div class="week-container">
     <h2>Woche vom <%= week.week_start %></h2>
 
-    <form action="/edit-week" method="get">
+    <form action="/edit-speiseplan" method="get">
       <input type="hidden" name="weekStart" value="<%= week.week_start %>">
       <button type="submit">Bearbeiten</button>
     </form>

@@ -171,13 +171,14 @@ app.post('/archive-week', async (req, res) => {
 });
 
 
-// Route für die "Speiseplan editieren"-Seite
-app.get('/edit-week', async (req, res) => {
+// Route für die Edit-Speiseplan-Seite
+app.get('/edit-speiseplan', async (req, res) => {
   try {
     const weekStart = req.query.weekStart;
     const menus = await model.getMenusForWeek(weekStart);
+    const allMenus = await model.getAllMenus('gericht', 'asc');
 
-    res.render('edit-week', { weekStart, menus });
+    res.render('editSpeiseplan', { weekStart, menus, allMenus });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
@@ -185,6 +186,42 @@ app.get('/edit-week', async (req, res) => {
 });
 
 
+// Route für das Aktualisieren des Speiseplans
+app.post('/update-week', async (req, res) => {
+  try {
+    const weekStart = req.body.weekStart;
+    const menus = {
+      mo1: req.body.mo1,
+      mo2: req.body.mo2,
+      mo3: req.body.mo3,
+      mo4: req.body.mo4,
+      di1: req.body.di1,
+      di2: req.body.di2,
+      di3: req.body.di3,
+      di4: req.body.di4,
+      mi1: req.body.mi1,
+      mi2: req.body.mi2,
+      mi3: req.body.mi3,
+      mi4: req.body.mi4,
+      do1: req.body.do1,
+      do2: req.body.do2,
+      do3: req.body.do3,
+      do4: req.body.do4,
+      fr1: req.body.fr1,
+      fr2: req.body.fr2,
+      fr3: req.body.fr3,
+      fr4: req.body.fr4,
+    };
+
+    await model.updateWeek(weekStart, menus);
+
+    // Weiterleitung zur Speiseplan-Seite oder einer anderen gewünschten Seite
+    res.redirect(`/edit-speiseplan?weekStart=${weekStart}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
