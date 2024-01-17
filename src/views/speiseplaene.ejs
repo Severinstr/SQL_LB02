@@ -14,20 +14,20 @@
 
     <form action="/edit-speiseplan" method="get">
       <input type="hidden" name="weekStart" value="<%= week.week_start %>">
-      <button type="submit">Bearbeiten</button>
+      <button class="icon-edit" type="submit">Bearbeiten</button>
     </form>
 
     <form action="/delete-week" method="post" onsubmit="return confirm('Sind Sie sicher, dass Sie diese Woche löschen möchten?');">
       <input type="hidden" name="weekStart" value="<%= week.week_start %>">
-      <button type="submit">Löschen</button>
+      <button class="icon-delete" type="submit">Löschen</button>
     </form>
 
     <form action="/archive-week" method="post">
       <input type="hidden" name="weekStart" value="<%= week.week_start %>">
       <% if (week.archiviert) { %>
-        <button type="submit">Nicht Archivieren</button>
+        <button class="icon-archive" type="submit">Nicht Archivieren</button>
       <% } else { %>
-        <button type="submit">Archivieren</button>
+        <button class="icon-archive" type="submit">Archivieren</button>
       <% } %>
     </form>
   </div>

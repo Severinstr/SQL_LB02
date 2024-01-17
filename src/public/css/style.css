@@ -1,0 +1,73 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+th, td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+th {
+    background-color: #f2f2f2;
+}
+
+
+
+
+
+
+
+
+
+/* style.css für die Sepeiseplan Seite*/
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #333;
+}
+
+.week-container {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.week-container h2 {
+    color: #555;
+}
+
+.week-container button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+    color: #007BFF;
+}
+
+.week-container button:hover {
+    color: #0056b3;
+}
+
+.icon-edit:before {
+    content: "\270E";
+}
+
+.icon-delete:before {
+    content: "\1F5D1"; /* Stelle sicher, dass das Icon korrekt ist oder ersetze es durch das gewünschte Icon */
+}
+
+.icon-archive:before {
+    content: "\1F4C2"; /* Stelle sicher, dass das Icon korrekt ist oder ersetze es durch das gewünschte Icon */
+}
+
+.week-separator {
+    border-top: 1px solid #ccc;
+    margin-top: 20px;
+    padding-top: 10px;
+}
+
+/* Weitere Styles nach Bedarf */
