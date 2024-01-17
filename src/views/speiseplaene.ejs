@@ -7,6 +7,22 @@
 </head>
 <body>
 <h1>Speisepläne</h1>
+<a href="/create-speiseplan">Neu+</a>
+
+<!-- Filter für Archivierte -->
+<form id="filterForm" action="/" method="get">
+  <label for="archivierteAnzeigen">Archivierte Anzeigen:</label>
+  <input type="checkbox" id="archivierteAnzeigen" name="archivierteAnzeigen" value="archivierteAnzeigen" <%= archivierteAnzeigen ? 'checked' : '' %> onchange="submitForm()" />
+  <input type="submit" value="Filtern">
+</form>
+
+<!-- JavaScript zum automatischen Absenden des Formulars bei Änderungen -->
+<script>
+  function submitForm() {
+    document.getElementById('filterForm').submit();
+  }
+</script>
+
 
 <% weeklyMenus.forEach(function(week) { %>
   <div class="week-container">
@@ -17,12 +33,12 @@
       <button class="icon-edit" type="submit">Bearbeiten</button>
     </form>
 
-    <form action="/delete-week" method="post" onsubmit="return confirm('Sind Sie sicher, dass Sie diese Woche löschen möchten?');">
+    <form action="/delete-week?archivierteAnzeigen=<%= archivierteAnzeigen%>" method="post" onsubmit="return confirm('Sind Sie sicher, dass Sie diese Woche löschen möchten?');">
       <input type="hidden" name="weekStart" value="<%= week.week_start %>">
       <button class="icon-delete" type="submit">Löschen</button>
     </form>
 
-    <form action="/archive-week" method="post">
+    <form action="/archive-week?archivierteAnzeigen=<%= archivierteAnzeigen%>" method="post">
       <input type="hidden" name="weekStart" value="<%= week.week_start %>">
       <% if (week.archiviert) { %>
         <button class="icon-archive" type="submit">Nicht Archivieren</button>

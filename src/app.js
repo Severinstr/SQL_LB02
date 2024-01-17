@@ -26,7 +26,9 @@ app.post('/delete-menu', async (req, res) => {
 
     // Menü löschen, wenn es nicht in einem Speiseplan verwendet wird
     await model.deleteMenu(menuIdToDelete);
-    res.redirect('/menus');
+    const sortBy = req.query.sortBy || 'gericht';
+    const sortOrder = req.query.sortOrder || 'asc';
+    res.redirect(`/menus?sortBy=${sortBy}&sortOrder=${sortOrder}`);
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
@@ -136,8 +138,9 @@ app.post('/create-menu', async (req, res) => {
 // Route für die Speiseplan-Seite
 app.get('/', async (req, res) => {
   try {
-    const weeklyMenus = await model.getWeeklyMenus();
-    res.render('speiseplaene', { weeklyMenus });
+    const archivierteAnzeigen = req.query.archivierteAnzeigen;
+    const weeklyMenus = await model.getWeeklySpeiseplane(archivierteAnzeigen);
+    res.render('speiseplaene', { weeklyMenus, archivierteAnzeigen });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
@@ -150,7 +153,8 @@ app.post('/delete-week', async (req, res) => {
     const weekStart = req.body.weekStart;
     await model.deleteWeek(weekStart);
 
-    res.redirect('/'); // Umleitung zur Speiseplan-Seite nach dem Löschen
+    const archivierteAnzeigen = req.query.archivierteAnzeigen;
+    res.redirect(`/?archivierteAnzeigen=${archivierteAnzeigen}`);
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
@@ -162,8 +166,8 @@ app.post('/archive-week', async (req, res) => {
   try {
     const weekStart = req.body.weekStart;
     const weekArchived = await model.archiveWeek(weekStart);
-
-    res.redirect('/'); // Umleitung zur Speiseplan-Seite nach dem Archivieren
+    const archivierteAnzeigen = req.query.archivierteAnzeigen;
+    res.redirect(`/?archivierteAnzeigen=${archivierteAnzeigen}`);
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
@@ -191,26 +195,26 @@ app.post('/update-week', async (req, res) => {
   try {
     const weekStart = req.body.weekStart;
     const menus = {
-      mo1: req.body.mo1,
-      mo2: req.body.mo2,
-      mo3: req.body.mo3,
-      mo4: req.body.mo4,
-      di1: req.body.di1,
-      di2: req.body.di2,
-      di3: req.body.di3,
-      di4: req.body.di4,
-      mi1: req.body.mi1,
-      mi2: req.body.mi2,
-      mi3: req.body.mi3,
-      mi4: req.body.mi4,
-      do1: req.body.do1,
-      do2: req.body.do2,
-      do3: req.body.do3,
-      do4: req.body.do4,
-      fr1: req.body.fr1,
-      fr2: req.body.fr2,
-      fr3: req.body.fr3,
-      fr4: req.body.fr4,
+      mo1: ( req.body.mo1 === '' ? null : req.body.mo1),
+      mo2: ( req.body.mo2 === '' ? null : req.body.mo2),
+      mo3: ( req.body.mo3 === '' ? null : req.body.mo3),
+      mo4: ( req.body.mo4 === '' ? null : req.body.mo4),
+      di1: ( req.body.di1 === '' ? null : req.body.di1),
+      di2: ( req.body.di2 === '' ? null : req.body.di2),
+      di3: ( req.body.di3 === '' ? null : req.body.di3),
+      di4: ( req.body.di4 === '' ? null : req.body.di4),
+      mi1: ( req.body.mi1 === '' ? null : req.body.mi1),
+      mi2: ( req.body.mi2 === '' ? null : req.body.mi2),
+      mi3: ( req.body.mi3 === '' ? null : req.body.mi3),
+      mi4: ( req.body.mi4 === '' ? null : req.body.mi4),
+      do1: ( req.body.do1 === '' ? null : req.body.do1),
+      do2: ( req.body.do2 === '' ? null : req.body.do2),
+      do3: ( req.body.do3 === '' ? null : req.body.do3),
+      do4: ( req.body.do4 === '' ? null : req.body.do4),
+      fr1: ( req.body.fr1 === '' ? null : req.body.fr1),
+      fr2: ( req.body.fr2 === '' ? null : req.body.fr2),
+      fr3: ( req.body.fr3 === '' ? null : req.body.fr3),
+      fr4: ( req.body.fr4 === '' ? null : req.body.fr4),
     };
 
     await model.updateWeek(weekStart, menus);
@@ -222,6 +226,50 @@ app.post('/update-week', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+// Neue Route zum Anzeigen des Formulars zum Erstellen eines neuen Speiseplan
+app.get('/create-speiseplan', async (req, res) => {
+  const allMenus = await model.getAllMenus('gericht', 'asc');
+  res.render('createSpeiseplan', {allMenus });
+});
+
+// Neue Route zum Verarbeiten des erstellten Speiseplan
+app.post('/create-speiseplan', async (req, res) => {
+  try {
+    const weekStart = req.body.weekStart;
+    const menus = {
+      mo1: ( req.body.mo1 === '' ? null : req.body.mo1),
+      mo2: ( req.body.mo2 === '' ? null : req.body.mo2),
+      mo3: ( req.body.mo3 === '' ? null : req.body.mo3),
+      mo4: ( req.body.mo4 === '' ? null : req.body.mo4),
+      di1: ( req.body.di1 === '' ? null : req.body.di1),
+      di2: ( req.body.di2 === '' ? null : req.body.di2),
+      di3: ( req.body.di3 === '' ? null : req.body.di3),
+      di4: ( req.body.di4 === '' ? null : req.body.di4),
+      mi1: ( req.body.mi1 === '' ? null : req.body.mi1),
+      mi2: ( req.body.mi2 === '' ? null : req.body.mi2),
+      mi3: ( req.body.mi3 === '' ? null : req.body.mi3),
+      mi4: ( req.body.mi4 === '' ? null : req.body.mi4),
+      do1: ( req.body.do1 === '' ? null : req.body.do1),
+      do2: ( req.body.do2 === '' ? null : req.body.do2),
+      do3: ( req.body.do3 === '' ? null : req.body.do3),
+      do4: ( req.body.do4 === '' ? null : req.body.do4),
+      fr1: ( req.body.fr1 === '' ? null : req.body.fr1),
+      fr2: ( req.body.fr2 === '' ? null : req.body.fr2),
+      fr3: ( req.body.fr3 === '' ? null : req.body.fr3),
+      fr4: ( req.body.fr4 === '' ? null : req.body.fr4),
+    };
+
+    // Fügen Sie den neuen Speiseplan zur Datenbank hinzu
+    const newSpeiseplanId = await model.insertSpeiseplan(weekStart,menus);
+
+    res.redirect(`/`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

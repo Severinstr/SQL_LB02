@@ -59,7 +59,7 @@
     <td><%= menus[i].halal %></td>
     <td>
       <a href="/edit-menu?menuId=<%= menus[i].menu_id %>">Bearbeiten</a>
-      <form action="/delete-menu" method="post">
+      <form action="/delete-menu?sortBy=<%= sortBy%>&sortOrder=<%= sortOrder%>" method="post">
         <input type="hidden" id="menuId" name="menuId" value="<%= menus[i].menu_id %>">
         <button type="submit">Löschen</button>
       </form>

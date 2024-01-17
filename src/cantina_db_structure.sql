@@ -13,7 +13,7 @@ FLUSH PRIVILEGES;
 -- Erstelle die Tabelle `speiseplan`
 CREATE TABLE IF NOT EXISTS speiseplan (
   speiseplan_id INT AUTO_INCREMENT PRIMARY KEY,
-  datum DATE,
+  datum DATE UNIQUE,
   archiviert BOOLEAN,
   mo1 INT,
   mo2 INT,

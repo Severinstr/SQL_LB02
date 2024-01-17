@@ -116,7 +116,7 @@ class CantinaModel {
 
   static getMenusForWeek(weekStart) {
     return new Promise((resolve, reject) => {
-      const query = 'SELECT mo1, mo2, mo3, mo4, di1, di2, di3, di4, mi1, mi2, mi3, mi4, do1, do2, do3, do4, fr1, fr2, fr3, fr4 FROM speiseplan WHERE DATE_FORMAT(datum, "%Y-%m-%d") = ?';
+      const query = 'SELECT mo1, mo2, mo3, mo4, di1, di2, di3, di4, mi1, mi2, mi3, mi4, do1, do2, do3, do4, fr1, fr2, fr3, fr4 FROM speiseplan WHERE DATE_FORMAT(datum, "%d.%m.%Y") = ?';
       connection.query(query, [weekStart], (error, results) => {
         if (error) {
           reject(error);
@@ -135,7 +135,7 @@ class CantinaModel {
                        mi1 = ?, mi2 = ?, mi3 = ?, mi4 = ?, 
                        do1 = ?, do2 = ?, do3 = ?, do4 = ?, 
                        fr1 = ?, fr2 = ?, fr3 = ?, fr4 = ?
-                   WHERE DATE_FORMAT(datum, "%Y-%m-%d") = ?`;
+                   WHERE DATE_FORMAT(datum, "%d.%m.%Y") = ?`;
 
       const values = [
         menus.mo1, menus.mo2, menus.mo3, menus.mo4,
@@ -156,10 +156,44 @@ class CantinaModel {
     });
   }
 
-
-  static getWeeklyMenus() {
+  static insertSpeiseplan(weekStart, menus) {
     return new Promise((resolve, reject) => {
-      const query = 'SELECT DISTINCT DATE_FORMAT(datum, "%Y-%m-%d") as week_start, archiviert FROM speiseplan';
+      const query = `INSERT INTO speiseplan (
+                       datum, archiviert,  
+                       mo1, mo2, mo3, mo4, 
+                       di1, di2, di3, di4, 
+                       mi1, mi2, mi3, mi4, 
+                       do1, do2, do3, do4, 
+                       fr1, fr2, fr3, fr4) VALUES (STR_TO_DATE(?, '%d.%m.%Y'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+      const values = [
+        weekStart, 0,
+        menus.mo1, menus.mo2, menus.mo3, menus.mo4,
+        menus.di1, menus.di2, menus.di3, menus.di4,
+        menus.mi1, menus.mi2, menus.mi3, menus.mi4,
+        menus.do1, menus.do2, menus.do3, menus.do4,
+        menus.fr1, menus.fr2, menus.fr3, menus.fr4
+      ];
+
+      connection.query(query, values, (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results.insertId);
+        }
+      });
+    });
+  }
+
+  static getWeeklySpeiseplane(archivierteAnzeigen) {
+    return new Promise((resolve, reject) => {
+      let query;
+      if (archivierteAnzeigen) {
+        query = 'SELECT DISTINCT DATE_FORMAT(datum, "%d.%m.%Y") as week_start, archiviert, datum FROM speiseplan ORDER BY datum DESC';
+      }
+      else {
+        query = 'SELECT DISTINCT DATE_FORMAT(datum, "%d.%m.%Y") as week_start, archiviert, datum FROM speiseplan WHERE archiviert=0 ORDER BY datum DESC';
+      }
       connection.query(query, (error, results) => {
         if (error) {
           reject(error);
@@ -173,7 +207,7 @@ class CantinaModel {
 
   static deleteWeek(weekStart) {
     return new Promise((resolve, reject) => {
-      const query = 'DELETE FROM speiseplan WHERE DATE_FORMAT(datum, "%Y-%m-%d") = ?';
+      const query = 'DELETE FROM speiseplan WHERE DATE_FORMAT(datum, "%d.%m.%Y") = ?';
       connection.query(query, [weekStart], (error, results) => {
         if (error) {
           reject(error);
@@ -187,7 +221,7 @@ class CantinaModel {
 
   static archiveWeek(weekStart) {
     return new Promise((resolve, reject) => {
-      const query = 'UPDATE speiseplan SET archiviert = NOT archiviert WHERE DATE_FORMAT(datum, "%Y-%m-%d") = ?';
+      const query = 'UPDATE speiseplan SET archiviert = NOT archiviert WHERE DATE_FORMAT(datum, "%d.%m.%Y") = ?';
       connection.query(query, [weekStart], (error, results) => {
         if (error) {
           reject(error);
