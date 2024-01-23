@@ -271,6 +271,47 @@ app.post('/create-speiseplan', async (req, res) => {
 });
 
 
+
+/************* Ausgabe in Json für Präsentation ***************/
+// Route für die Speiseplan-Seite
+app.get('/api/v1/speiseplaene', async (req, res) => {
+  try {
+    const archivierteAnzeigen =1;
+    const weeklyMenus = await model.getWeeklySpeiseplane(archivierteAnzeigen);
+    res.json({weeklyMenus });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+app.get('/api/v1/speiseplan/:speiseplanId', async (req, res) => {
+  const speiseplan = await model.getSpeiseplanById(req.params.speiseplanId);
+  res.json(speiseplan);
+});
+
+
+// Route zum Löschen einer Woche
+app.post('/api/v1/delete-speiseplan/:speiseplanId', async (req, res) => {
+  try {
+    const speiseplanId = req.params.speiseplanId;
+    const deletedSpeiseplan = await model.deleteSpeiseplanById(speiseplanId);
+
+    // Überprüfe, ob der Speiseplan gelöscht wurde
+    if (!deletedSpeiseplan) {
+      return res.status(404).json({ error: 'Speiseplan nicht gefunden' });
+    }
+
+    // Hier wird die Antwort als JSON zurückgegeben
+    res.json({ message: 'Speiseplan erfolgreich gelöscht' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });

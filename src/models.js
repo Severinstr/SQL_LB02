@@ -189,10 +189,10 @@ class CantinaModel {
     return new Promise((resolve, reject) => {
       let query;
       if (archivierteAnzeigen) {
-        query = 'SELECT DISTINCT DATE_FORMAT(datum, "%d.%m.%Y") as week_start, archiviert, datum FROM speiseplan ORDER BY datum DESC';
+        query = 'SELECT DISTINCT speiseplan_id, DATE_FORMAT(datum, "%d.%m.%Y") as week_start, archiviert, datum FROM speiseplan ORDER BY datum DESC';
       }
       else {
-        query = 'SELECT DISTINCT DATE_FORMAT(datum, "%d.%m.%Y") as week_start, archiviert, datum FROM speiseplan WHERE archiviert=0 ORDER BY datum DESC';
+        query = 'SELECT DISTINCT speiseplan_id, DATE_FORMAT(datum, "%d.%m.%Y") as week_start, archiviert, datum FROM speiseplan WHERE archiviert=0 ORDER BY datum DESC';
       }
       connection.query(query, (error, results) => {
         if (error) {
@@ -218,6 +218,24 @@ class CantinaModel {
     });
   }
 
+  static deleteSpeiseplanById(speiseplanId) {
+    return new Promise((resolve, reject) => {
+      const query = 'DELETE FROM speiseplan WHERE speiseplan_id = ?';
+      connection.query(query, [speiseplanId], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          // Überprüfe, ob ein Speiseplan gelöscht wurde
+          const deletedRowCount = results.affectedRows;
+          if (deletedRowCount === 0) {
+            resolve(null); // Speiseplan nicht gefunden
+          } else {
+            resolve({ speiseplanId, deletedRowCount });
+          }
+        }
+      });
+    });
+  }
 
   static archiveWeek(weekStart) {
     return new Promise((resolve, reject) => {
