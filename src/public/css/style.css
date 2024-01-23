@@ -11,13 +11,68 @@ th {
     background-color: #f2f2f2;
 }
 
+.header {
+    background-color: #252526;
+    align-content: center;
+    color: white;
+    height: 20px;
+    padding: 20px 0px 20px 15px;
+}
 
+.header a {
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    padding-right: 10px;
+}
 
+.header a:hover {
+    text-decoration: underline;
+}
 
+.title {
+    background-color: grey;
+    color: white;
+    padding: 30px 0 30px 15px;
+}
 
+.title h1{
+    margin: 0px;
+}
 
+.main {
+    padding: 50px 0px 50px 15px;
+}
 
+input, select {
+    margin: 5px 0px 5px 0px;
+}
 
+input[type=text] {
+    width: 400px
+}
+
+label {
+    width: 170px;
+    display: inline-block;
+}
+
+button {
+    padding: 5px 10px 5px 10px;
+    margin: 30px 0px 0px 0px;
+    background-color: black;
+    color: white;
+}
+
+.week-container button {
+    margin: 0px;
+}
+
+.week-container button:before {
+    margin: 0px 10px 0px 0px;
+    width: 20px;
+    display: inline-block;
+}
 
 /* style.css für die Sepeiseplan Seite*/
 
@@ -25,9 +80,6 @@ body {
     font-family: Arial, sans-serif;
 }
 
-h1 {
-    color: #333;
-}
 
 .week-container {
     margin-bottom: 20px;
@@ -68,6 +120,16 @@ h1 {
     border-top: 1px solid #ccc;
     margin-top: 20px;
     padding-top: 10px;
+}
+
+#filterForm input[type=submit]{
+    display: none;
+}
+
+/* style.css für die Menüs Seite*/
+
+#sortForm input[type=submit]{
+    display: none;
 }
 
 /* Weitere Styles nach Bedarf */

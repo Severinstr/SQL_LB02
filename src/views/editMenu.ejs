@@ -6,7 +6,12 @@
   <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-<h1>Menü bearbeiten: <%= menu.gericht %></h1>
+<div class="header">
+  <a href="/">Speisepläne</a>
+  <a href="/menus">Menüs</a>
+</div>
+<div class="title"><h1>Menü bearbeiten: <%= menu.gericht %></h1></div>
+<div class="main">
 <form action="/edit-menu" method="post">
   <input type="hidden" name="menuId" value="<%= menu.menu_id %>"><br>
 
@@ -36,5 +41,6 @@
 
   <button type="submit">Speichern</button>
 </form>
+</div>
 </body>
 </html>

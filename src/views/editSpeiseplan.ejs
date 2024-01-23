@@ -6,17 +6,23 @@
   <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-<h1>Edit Speiseplan für Woche vom <%= weekStart %></h1>
+<div class="header">
+  <a href="/">Speisepläne</a>
+  <a href="/menus">Menüs</a>
+</div>
+<div class="title"><h1>Edit Speiseplan für Woche vom <%= weekStart %></h1></div>
+<div class="main">
+
 
 <form action="/update-week" method="post">
   <input type="hidden" name="weekStart" value="<%= weekStart %>">
   <table border="1">
     <tr>
       <th></th> <!-- Leere Zelle für die Wochentage -->
-      <th>Menu1 Fleisch</th>
-      <th>Menu2 Vegi</th>
-      <th>Menu3 Vegan</th>
-      <th>Menu4 Halal</th>
+      <th>Menü 1 Fleisch</th>
+      <th>Menü 2 Vegi</th>
+      <th>Menü 3 Vegan</th>
+      <th>Menü 4 Halal</th>
     </tr>
     <% const weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag']; %>
     <% const weekdaysShort = ['mo', 'di', 'mi', 'do', 'fr']; %>
@@ -65,6 +71,6 @@
 <form action="/" method="get">
   <button type="submit">Schließen</button>
 </form>
-
+</div>
 </body>
 </html>

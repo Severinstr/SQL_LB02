@@ -6,7 +6,12 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-<h1>Neues Menü erstellen</h1>
+<div class="header">
+    <a href="/">Speisepläne</a>
+    <a href="/menus">Menüs</a>
+</div>
+<div class="title"><h1>Neues Menü erstellen</h1></div>
+<div class="main">
 <form action="/create-menu" method="post">
     <label for="gericht">Gericht:</label>
     <input type="text" id="gericht" name="gericht" required><br>
@@ -34,5 +39,6 @@
 
     <button type="submit">Menü erstellen</button>
 </form>
+</div>
 </body>
 </html>

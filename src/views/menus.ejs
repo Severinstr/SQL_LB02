@@ -6,7 +6,15 @@
   <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-<h1>Alle Menus</h1>
+
+<div class="header">
+  <a href="/">Speisepläne</a>
+  <a href="/menus">Menüs</a>
+
+</div>
+<div class="title"><h1>Alle Menus</h1></div>
+<div class="main">
+
 <a href="/create-menu">Neu+</a>
 
 <!-- Dropdown-Menü für Sortierung -->
@@ -17,7 +25,7 @@
       <option value="<%= column %>" <%= column === sortBy ? 'selected' : '' %>><%= column %></option>
     <% }); %>
   </select>
-
+<br>
   <label for="sortOrder">Sortierreihenfolge:</label>
   <select id="sortOrder" name="sortOrder" onchange="submitForm()">
     <option value="asc" <%= sortOrder === 'asc' ? 'selected' : '' %>>Aufsteigend</option>
@@ -26,6 +34,8 @@
 
   <input type="submit" value="Sortieren">
 </form>
+
+
 
 <!-- JavaScript zum automatischen Absenden des Formulars bei Änderungen -->
 <script>
@@ -67,6 +77,6 @@
   </tr>
   <% } %>
 </table>
-
+</div>
 </body>
 </html>
